@@ -67,7 +67,6 @@ class FTPFile extends LocalFile implements iFile {
         $this->password = $password;
         $this->port = $port;
         $this->ftpHandle = ftp_connect($host, $port, 999);
-        ftp_pasv($this->ftpHandle, true);
         return ftp_login($this->ftpHandle, $login, $password);
     }
 
