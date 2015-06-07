@@ -115,5 +115,4 @@ class FTPFileTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($ftp->fileExist($this->fileName1));
         $ftp->close();
     }
-
 }
