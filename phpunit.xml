@@ -1,0 +1,13 @@
+<phpunit bootstrap="bootstrap.php">
+    <filter>
+        <whitelist>
+            <directory>/src</directory>
+        </whitelist>
+    </filter>
+    <testsuite>
+        <directory>./tests</directory>
+    </testsuite>
+    <!--<logging>
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
+    </logging>-->
+</phpunit>

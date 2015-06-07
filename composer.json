@@ -1,0 +1,22 @@
+{
+  "name": "bpteam/File",
+  "description": "tiny and slow ;) php classes for work with files",
+  "minimum-stability": "stable",
+  "authors": [
+    {
+      "name": "Evgeny Pynykh",
+      "email": "bpteam22@gmail.com",
+      "homepage": "http://bpteam.net",
+      "role": "Developer"
+    }
+  ],
+  "config": {
+    "platform": {"php": "5.6"}
+  },
+  "require-dev": {
+    "codeclimate/php-test-reporter": "dev-master"
+  },
+  "autoload" : {
+    "files": ["bootstrap.php"]
+  }
+}
