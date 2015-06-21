@@ -17,9 +17,6 @@
     "codeclimate/php-test-reporter": "dev-master"
   },
   "autoload" : {
-    "psr-4": {
-      "bpteam\\": "src/"
-    },
-    "files": ["bootstrap.php"]
+    "psr-4": { "bpteam\\File\\": "src/File" }
   }
 }
