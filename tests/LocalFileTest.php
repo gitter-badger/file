@@ -55,14 +55,14 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
     public function testOpen()
     {
         $file = new LocalFile();
-        $file->open($this->fileName1);
-        $this->assertFileExists($this->fileName1);
+        $file->open(self::$fileName1);
+        $this->assertFileExists(self::$fileName1);
         $file->close();
     }
 
     public function testClose()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $this->assertTrue(is_resource($file->getHandle()));
         $file->close();
         $this->assertFalse(is_resource($file->getHandle()));
@@ -70,7 +70,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testWrite()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $result = $file->write('hello world ' . microtime(true) . "\n");
         $this->assertGreaterThanOrEqual(12, $result);
         $file->close();
@@ -78,7 +78,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->write('hello world ' . microtime(true) . "\n");
         $data = $file->read();
         $this->assertRegExp('%hello world%', $data);
@@ -87,7 +87,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testClear()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->clear();
         $this->assertEquals('', $file->read());
         $file->close();
@@ -95,40 +95,40 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $file = new LocalFile($this->fileName1);
-        $this->assertFileExists($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
+        $this->assertFileExists(self::$fileName1);
         $file->delete();
-        $this->assertFileNotExists($this->fileName1);
+        $this->assertFileNotExists(self::$fileName1);
         $file->close();
     }
 
     public function testDelDir()
     {
-        $this->assertFalse(is_dir($this->dir1));
-        mkdir($this->dir1);
-        $this->assertTrue(is_dir($this->dir1));
-        LocalFile::delDir($this->dir1);
-        $this->assertFalse(is_dir($this->dir1));
+        $this->assertFalse(is_dir(self::$dir1));
+        mkdir(self::$dir1);
+        $this->assertTrue(is_dir(self::$dir1));
+        LocalFile::delDir(self::$dir1);
+        $this->assertFalse(is_dir(self::$dir1));
     }
 
     public function testClearDir()
     {
-        mkdir($this->dir1);
-        (new LocalFile($this->dir1 . '/f1'))->close();
-        (new LocalFile($this->dir1 . '/f2'))->close();
-        $this->assertArrayHasKey(0, glob($this->dir1 . "/*"));
-        $this->assertArrayHasKey(1, glob($this->dir1 . "/*"));
-        $this->assertRegExp('%f1$%', glob($this->dir1 . "/*")[0]);
-        $this->assertRegExp('%f2$%', glob($this->dir1 . "/*")[1]);
-        LocalFile::clearDir($this->dir1);
-        $this->assertCount(0, glob($this->dir1 . "/*"));
-        LocalFile::delDir($this->dir1);
-        $this->assertFalse(is_dir($this->dir1));
+        mkdir(self::$dir1);
+        (new LocalFile(self::$dir1 . '/f1'))->close();
+        (new LocalFile(self::$dir1 . '/f2'))->close();
+        $this->assertArrayHasKey(0, glob(self::$dir1 . "/*"));
+        $this->assertArrayHasKey(1, glob(self::$dir1 . "/*"));
+        $this->assertRegExp('%f1$%', glob(self::$dir1 . "/*")[0]);
+        $this->assertRegExp('%f2$%', glob(self::$dir1 . "/*")[1]);
+        LocalFile::clearDir(self::$dir1);
+        $this->assertCount(0, glob(self::$dir1 . "/*"));
+        LocalFile::delDir(self::$dir1);
+        $this->assertFalse(is_dir(self::$dir1));
     }
 
     public function testLock()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $this->assertTrue($file->lock());
         $this->assertTrue($file->isOwner());
         $this->assertTrue($file->free());
@@ -138,7 +138,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testWriteLock()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->lock();
         $result = $file->write('hello world');
         $this->assertGreaterThanOrEqual(11, $result);
@@ -147,7 +147,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testReadLock()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->lock();
         $file->write('hello world');
         $data = $file->read();
@@ -157,16 +157,16 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testDeleteLock()
     {
-        $file = new LocalFile($this->fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->lock();
         $file->delete();
-        $this->assertFileNotExists($this->fileName1);
+        $this->assertFileNotExists(self::$fileName1);
     }
 
     public function testCantWriteLock()
     {
-        $fileBlock = new LocalFile($this->fileName1);
-        $file = new LocalFile($this->fileName1);
+        $fileBlock = new LocalFile(self::$fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->setWaitWhenFree(false);
         $fileBlock->lock();
         $fileBlock->write('I can write');
@@ -185,36 +185,36 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
 
     public function testCantDeleteLock()
     {
-        $fileBlock = new LocalFile($this->fileName1);
-        $file = new LocalFile($this->fileName1);
+        $fileBlock = new LocalFile(self::$fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->setWaitWhenFree(false);
         $fileBlock->lock();
         $file->delete();
-        $this->assertFileExists($this->fileName1);
+        $this->assertFileExists(self::$fileName1);
         $fileBlock->close();
         $file->delete();
-        $this->assertFileNotExists($this->fileName1);
+        $this->assertFileNotExists(self::$fileName1);
     }
 
     public function testCantLockLock()
     {
-        $fileBlock = new LocalFile($this->fileName1);
-        $file = new LocalFile($this->fileName1);
+        $fileBlock = new LocalFile(self::$fileName1);
+        $file = new LocalFile(self::$fileName1);
         $file->setWaitWhenFree(false);
         $fileBlock->lock();
         $this->assertTrue($fileBlock->isOwner());
         $this->assertFalse($file->isOwner());
         $file->delete();
-        $this->assertFileExists($this->fileName1);
+        $this->assertFileExists(self::$fileName1);
         $file->lock();
         $this->assertTrue($fileBlock->isOwner());
         $this->assertFalse($file->isOwner());
         $file->delete();
-        $this->assertFileExists($this->fileName1);
+        $this->assertFileExists(self::$fileName1);
         $fileBlock->close();
         $file->lock();
         $this->assertTrue($file->isOwner());
         $file->delete();
-        $this->assertFileNotExists($this->fileName1);
+        $this->assertFileNotExists(self::$fileName1);
     }
 }
