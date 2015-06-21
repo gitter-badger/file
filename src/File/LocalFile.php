@@ -31,7 +31,7 @@ class LocalFile implements iFile
      * Ожидать пока освободиться файл или нет
      * @var bool
      */
-    protected $waitWhenFree = false;
+    protected $waitWhenFree = true;
 
     /**
      * @param string $currentPath

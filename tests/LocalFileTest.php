@@ -15,9 +15,16 @@ use \ReflectionClass;
 
 class LocalFileTest extends PHPUnit_Framework_TestCase
 {
-    public $fileName1 = __DIR__ . '/for_tests/f1.txt';
-    public $fileName2 = __DIR__ . '/for_tests/f2';
-    public $dir1 = __DIR__ . '/for_tests/rm_me';
+    public static $fileName1;
+    public static $fileName2;
+    public static $dir1;
+
+    public static function setUpBeforeClass()
+    {
+        self::$fileName1 = __DIR__ . '/for_tests/f1.txt';
+        self::$fileName2 = __DIR__ . '/for_tests/f2';
+        self::$dir1 = __DIR__ . '/for_tests/rm_me';
+    }
 
     /**
      * @param        $name
@@ -160,7 +167,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
     {
         $fileBlock = new LocalFile($this->fileName1);
         $file = new LocalFile($this->fileName1);
-
+        $file->setWaitWhenFree(false);
         $fileBlock->lock();
         $fileBlock->write('I can write');
         $data = $fileBlock->read();
@@ -180,6 +187,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
     {
         $fileBlock = new LocalFile($this->fileName1);
         $file = new LocalFile($this->fileName1);
+        $file->setWaitWhenFree(false);
         $fileBlock->lock();
         $file->delete();
         $this->assertFileExists($this->fileName1);
@@ -192,6 +200,7 @@ class LocalFileTest extends PHPUnit_Framework_TestCase
     {
         $fileBlock = new LocalFile($this->fileName1);
         $file = new LocalFile($this->fileName1);
+        $file->setWaitWhenFree(false);
         $fileBlock->lock();
         $this->assertTrue($fileBlock->isOwner());
         $this->assertFalse($file->isOwner());
